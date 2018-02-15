@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">IslamabadProperty</string>
+    <string name="app_name">Islamabad Property</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

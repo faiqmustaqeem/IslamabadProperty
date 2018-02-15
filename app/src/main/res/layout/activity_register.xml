@@ -40,6 +40,8 @@
                android:layout_width="0dp"
                android:layout_weight="4"
                android:hint="Full Name"
+               android:inputType="textPersonName"
+               android:textColor="@android:color/white"
                android:textColorHint="@android:color/white"
                android:layout_height="wrap_content"
                android:backgroundTint="@android:color/white"
@@ -67,12 +69,15 @@
                 android:layout_width="0dp"
                 android:layout_weight="4"
                 android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/white"
                 />
 
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/contact_layout"
@@ -93,14 +98,74 @@
             <android.support.v7.widget.AppCompatEditText
                 android:layout_width="0dp"
                 android:layout_weight="4"
+                android:textColor="@android:color/white"
                 android:hint="Phone Number"
+                android:inputType="number"
                 android:textColorHint="@android:color/white"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/white"
                 />
 
         </LinearLayout>
-        
+
+        <LinearLayout
+            android:id="@+id/country_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/contact_layout"
+            android:layout_marginTop="10dp"
+            android:weightSum="5">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight=".7"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/location"/>
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner_country"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:textColor="@android:color/white"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/city_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/country_layout"
+            android:layout_marginTop="10dp"
+            android:weightSum="5">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight=".7"
+                android:src="@mipmap/location" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:textColor="@android:color/white"
+                android:hint="City"
+                android:inputType="number"
+                android:textColorHint="@android:color/white"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                />
+
+        </LinearLayout>
+
+
+
         <Button
             android:id="@+id/register"
             android:layout_width="match_parent"
@@ -109,10 +174,10 @@
             android:text="REGISTER"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_below="@id/contact_layout"/>
+            android:layout_below="@id/city_layout"/>
 
 
         <android.support.v7.widget.AppCompatEditText

@@ -13,6 +13,13 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary">
 
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/back"
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,6 +32,15 @@
             android:shadowRadius="10"
             android:textColor="@android:color/white"
             android:text="ISLAMABADPROPERTY.PK"/>
+
+        <ImageView
+            android:id="@+id/call"
+            android:layout_width="30dp"
+            android:clickable="true"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/call"
+            android:layout_gravity="right"/>
 
 
 
@@ -84,4 +100,19 @@
         </RelativeLayout>
 
     </ScrollView>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-7007144167760143/5861148652">
+        </com.google.android.gms.ads.AdView>
+
 </RelativeLayout>
