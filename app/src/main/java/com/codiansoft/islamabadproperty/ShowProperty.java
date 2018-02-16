@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -22,6 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.squareup.picasso.Picasso;
 
 public class ShowProperty extends AppCompatActivity {
 
@@ -33,6 +35,9 @@ public class ShowProperty extends AppCompatActivity {
     public static boolean sentToSettings = false;
     public static SharedPreferences permissionStatus;
     private AdView mAdView;
+    ImageView property_image;
+    TextView description;
+
 
 
     @Override
@@ -42,6 +47,9 @@ public class ShowProperty extends AppCompatActivity {
 
         back=(ImageView)findViewById(R.id.back);
         call=(ImageView)findViewById(R.id.call);
+        property_image=findViewById(R.id.image_property);
+        description=findViewById(R.id.description);
+
         activity=this;
 
 
@@ -61,9 +69,12 @@ public class ShowProperty extends AppCompatActivity {
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getCallPermissions("03128676054");
+                getCallPermissions(GlobalClass.selected_property.getContactNumber());
             }
         });
+        Picasso.with(activity).load(GlobalClass.selected_property.getImageLink()).into(property_image);
+        description.setText(GlobalClass.selected_property.getDescription());
+
     }
     void getCallPermissions(String contact_number)
     {
@@ -158,5 +169,6 @@ public class ShowProperty extends AppCompatActivity {
                 .canceledOnTouchOutside(false)
                 .show();
     }
+
 
 }

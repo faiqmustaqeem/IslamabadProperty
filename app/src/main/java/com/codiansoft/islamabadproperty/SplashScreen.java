@@ -2,6 +2,7 @@ package com.codiansoft.islamabadproperty;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,8 +30,17 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(SplashScreen.this, RegisterActivity.class);
-                startActivity(i);
+
+                SharedPreferences prefs = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                String email=prefs.getString("email","");
+                if(email.equals("")) {
+                    Intent i = new Intent(SplashScreen.this, RegisterActivity.class);
+                    startActivity(i);
+                }
+                else {
+                    Intent i2 = new Intent(SplashScreen.this, MainActivity.class);
+                    startActivity(i2);
+                }
 
                 // close this activity
                 finish();

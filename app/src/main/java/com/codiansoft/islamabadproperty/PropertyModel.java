@@ -11,12 +11,12 @@ public class PropertyModel {
     private String imageLink;
 
 
-    public PropertyModel( String date,String contactNumber,String description,String imageLink)
+    public PropertyModel()
     {
-        this.date=date;
-        this.contactNumber=contactNumber;
-        this.description=description;
-        this.imageLink=imageLink;
+//        this.date=date;
+//        this.contactNumber=contactNumber;
+//        this.description=description;
+//        this.imageLink=imageLink;
     }
 
     public String getDate() {
