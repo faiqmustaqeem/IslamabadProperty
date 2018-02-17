@@ -185,6 +185,8 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.MyView
 //    }
     @Override
     public int getItemCount() {
+        if(propertyFilteredList== null)
+            return 0;
         return propertyFilteredList.size();
     }
 
@@ -202,8 +204,10 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.MyView
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (row.getDate().toLowerCase().substring(8,10).equals(charString.toLowerCase())
-                                ||row.getDate().toLowerCase().substring(5,7).equals(charString.toLowerCase())) {
+                      //  Log.e("filter_date_adapter",row.getDate().substring(8,10)+"-"+row.getDate().substring(5,7));
+                                                        //||charString.substring(3,5).equals(row.getDate().substring(5,7))
+                        if (charString.substring(0,2).equals(row.getDate().substring(8,10)))
+                        {
 
                             filteredList.add(row);
                         }

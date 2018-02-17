@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -37,9 +40,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
     DatePickerDialog datePickerDialog;
     TextView showAll;
     List<PropertyModel> propertyModelList=new ArrayList<>();
+    ConnectionHelper connectionHelper;
 
 
     public static final int CALL_PERMISSION_CONSTANT = 100;
@@ -68,6 +76,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         activity=this;
+        connectionHelper=new ConnectionHelper(activity);
 
 
         // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
@@ -117,23 +126,42 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
                 adapter.getFilter().filter(String.valueOf(""));
             }
         });
-        loadData();
+        try {
+            loadData();
+        } catch (IOException e) {
+            Toast.makeText(activity , " your application is not connected to internet ..." , Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            Toast.makeText(activity , " your application is not connected to internet ..." , Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
 
     }
-//    List<PropertyModel> getProperties()
-//    {
-//        List<PropertyModel> list=new ArrayList<>();
-//        list.add(new PropertyModel("11 january 2018","03128676054","Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.","https://315wf32byijl3k75j711kbzw-wpengine.netdna-ssl.com/wp-content/uploads/house-facade-grady-homes-builder-magnetic-e1455241142151-739x417.jpg"));
-//        list.add(new PropertyModel("12 january 2018","03128676054","Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.","https://315wf32byijl3k75j711kbzw-wpengine.netdna-ssl.com/wp-content/uploads/house-facade-grady-homes-builder-magnetic-e1455241142151-739x417.jpg"));
-//        list.add(new PropertyModel("13 january 2018","03128676054","Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.","https://315wf32byijl3k75j711kbzw-wpengine.netdna-ssl.com/wp-content/uploads/house-facade-grady-homes-builder-magnetic-e1455241142151-739x417.jpg"));
-//        list.add(new PropertyModel("28 July 2018","03128676054","Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.","https://315wf32byijl3k75j711kbzw-wpengine.netdna-ssl.com/wp-content/uploads/house-facade-grady-homes-builder-magnetic-e1455241142151-739x417.jpg"));
-//        list.add(new PropertyModel("11 December 2018","03128676054","Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.","https://315wf32byijl3k75j711kbzw-wpengine.netdna-ssl.com/wp-content/uploads/house-facade-grady-homes-builder-magnetic-e1455241142151-739x417.jpg"));
-//        return list;
-//    }
+
 
     @Override
-    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-        adapter.getFilter().filter(String.valueOf(i2));
+    public void onDateSet(DatePicker datePicker,int year, int month, int dayOfMonth) {
+        Log.e("filter_date",String.valueOf(dayOfMonth)+"-"+String.valueOf(month));
+//        String zero_trailing_month="";
+//
+//             zero_trailing_month= String.valueOf(month+1);
+//            if(zero_trailing_month.length() < 2)
+//            {
+//                zero_trailing_month="0"+zero_trailing_month;
+//            }
+
+
+        String zero_trailing_day="";
+        if(String.valueOf(dayOfMonth).length() < 2)
+        {
+            zero_trailing_day= "0"+String.valueOf(dayOfMonth);
+        }
+        else {
+            zero_trailing_day= String.valueOf(dayOfMonth);
+        }
+        Log.e("filter_date",String.valueOf(zero_trailing_day));
+        adapter.getFilter().filter(String.valueOf(zero_trailing_day));
+        // 16-12
     }
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -198,7 +226,11 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
 //            }
 //        }
 //    }
-    void loadData() {
+
+    void loadData() throws IOException, InterruptedException {
+
+        if(connectionHelper.isConnectingToInternet())
+        {
             final ProgressDialog dialog=new ProgressDialog(activity);
             dialog.setTitle("Loading");
             dialog.setMessage("Wait...");
@@ -232,6 +264,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
                                         propertyModelList.add(model);
 
                                     }
+                                    Collections.reverse(propertyModelList);
                                     adapter.notifyDataSetChanged();
 
                                     dialog.dismiss();
@@ -263,15 +296,28 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
             Volley.newRequestQueue(activity).add(request);
 
         }
+        else {
+            Toast.makeText(activity , " your application is not connected to internet ..." , Toast.LENGTH_SHORT).show();
+        }
+        }
     public void parseVolleyError(VolleyError error) {
-        try {
-            String responseBody = new String(error.networkResponse.data, "utf-8");
-            JSONObject data = new JSONObject(responseBody);
-            JSONObject result = data.getJSONObject("result");
-            String message = result.getString("response");
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        } catch (JSONException e) {
-        } catch (UnsupportedEncodingException errorr) {
+         NetworkResponse response=error.networkResponse;
+
+        if(response!=null && response.data!=null)
+        {
+            try {
+                String responseBody = new String(error.networkResponse.data, "utf-8");
+                JSONObject data = new JSONObject(responseBody);
+                JSONObject result = data.getJSONObject("result");
+                String message = result.getString("response");
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+            } catch (UnsupportedEncodingException errorr) {
+            }
+        }
+        else
+        {
+            Toast.makeText(activity , " your application is not connected to internet ..." , Toast.LENGTH_SHORT).show();
         }
     }
 

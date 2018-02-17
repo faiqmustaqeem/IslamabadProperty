@@ -2,8 +2,10 @@ package com.codiansoft.islamabadproperty;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,7 +29,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
     AppCompatSpinner spinner;
     String country_name;
     EditText etName, etEmail, etCity, etPhoneNumber;
-
+    ConnectionHelper connectionHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,12 +62,19 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etCity = findViewById(R.id.etCity);
         etPhoneNumber = findViewById(R.id.etNumber);
+        connectionHelper=new ConnectionHelper(activity);
 
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            register();
+                try {
+                    register();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -97,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    void register() {
+    void register() throws IOException, InterruptedException {
 
         if (checkFields()) {
             final ProgressDialog dialog=new ProgressDialog(activity);
@@ -149,7 +162,8 @@ public class RegisterActivity extends AppCompatActivity {
                             }
 
                         }
-                    },
+                    }
+                    ,
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
@@ -185,18 +199,32 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
     public void parseVolleyError(VolleyError error) {
-        try {
-            String responseBody = new String(error.networkResponse.data, "utf-8");
-            JSONObject data = new JSONObject(responseBody);
-            JSONObject result = data.getJSONObject("result");
-            String message = result.getString("response");
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        } catch (JSONException e) {
-        } catch (UnsupportedEncodingException errorr) {
+        NetworkResponse response=error.networkResponse;
+
+        if(response!=null && response.data!=null) {
+            try {
+                String responseBody = new String(error.networkResponse.data, "utf-8");
+                JSONObject data = new JSONObject(responseBody);
+                JSONObject result = data.getJSONObject("result");
+                String message = result.getString("response");
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            } catch (JSONException | UnsupportedEncodingException e) {
+                printMsg("internet problem...");
+            }
+        }
+        else
+        {
+            printMsg("Your application is not connected to internet...");
         }
     }
-    boolean checkFields()
-    {
+
+
+    boolean checkFields() throws IOException, InterruptedException {
+        if(!connectionHelper.isConnectingToInternet())
+        {
+            printMsg("Your application is not connected to internet...");
+            return false;
+        }
         if(etName.getText().toString().equals(""))
         {
             printMsg("Enter name");
