@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -66,11 +68,10 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.MyView
         holder.date.setText(model.getDate());
         holder.description.setText(model.getDescription());
 
-        Picasso.with(context)
+        Glide.with(context)
                 .load(model.getImageLink())
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.no_image_available)
-                .into(holder.image);
+                .apply(new RequestOptions().placeholder(R.drawable.loading).error(R.drawable.no_image_available)).into(holder.image);
+
 
 //        holder.call.setOnClickListener(new View.OnClickListener() {
 //            @Override

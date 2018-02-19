@@ -28,6 +28,15 @@
             android:text="11 January 2018"
             android:textColor="@android:color/black"
             android:textSize="20sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Read More .."
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/black"
+            android:layout_alignParentRight="true"/>
         <ImageView
             android:id="@+id/call"
             android:layout_width="35dp"

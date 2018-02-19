@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity  implements DatePickerDialog
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e("Volley_error" , error.getMessage() );
+                           // Log.e("Volley_error" , error.getMessage() );
                             parseVolleyError(error);
                             dialog.dismiss();
                         }

@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -72,7 +74,11 @@ public class ShowProperty extends AppCompatActivity {
                 getCallPermissions(GlobalClass.selected_property.getContactNumber());
             }
         });
-        Picasso.with(activity).load(GlobalClass.selected_property.getImageLink()).into(property_image);
+       // Picasso.with(activity).load(GlobalClass.selected_property.getImageLink()).into(property_image);
+        Glide.with(activity)
+                .load(GlobalClass.selected_property.getImageLink())
+                .apply(new RequestOptions().placeholder(R.drawable.loading).error(R.drawable.no_image_available)).into(property_image);
+
         description.setText(GlobalClass.selected_property.getDescription());
 
     }
