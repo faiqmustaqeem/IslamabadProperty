@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -21,13 +23,18 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -62,7 +69,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(PropertyAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final PropertyAdapter.MyViewHolder holder, int position) {
         final PropertyModel model = propertyFilteredList.get(position);
 
         holder.date.setText(model.getDate());
@@ -71,6 +78,23 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.MyView
         Glide.with(context)
                 .load(model.getImageLink())
                 .apply(new RequestOptions().placeholder(R.drawable.loading).error(R.drawable.no_image_available)).into(holder.image);
+
+//        Glide.with(context)
+//                .load(model.getImageLink())
+//                .listener(new RequestListener<Drawable>() {
+//                    @Override
+//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//                        holder.progressBar.setVisibility(View.GONE);
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                        holder.progressBar.setVisibility(View.GONE);
+//                        return false;
+//                    }
+//
+//                }).into(holder.image);
 
 
 //        holder.call.setOnClickListener(new View.OnClickListener() {
@@ -234,12 +258,14 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
        TextView date , description ;
         ImageView image , call;
+        ProgressBar progressBar;
         public MyViewHolder(View itemView) {
             super(itemView);
             date=itemView.findViewById(R.id.date);
             description=itemView.findViewById(R.id.description);
             image=itemView.findViewById(R.id.image_property);
             call=itemView.findViewById(R.id.call);
+            progressBar=itemView.findViewById(R.id.progressbar);
         }
     }
 }

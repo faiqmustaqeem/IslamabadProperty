@@ -44,7 +44,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setAutoCancel(true)
-                .setContentTitle("WFDSA")
+                .setContentTitle("Islamabad Property")
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentText(messageToShow)
                 .setSmallIcon(R.mipmap.ic_launcher)

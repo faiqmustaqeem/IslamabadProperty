@@ -11,7 +11,6 @@
     android:layout_width="match_parent"
     android:layout_height="320dp"
     card_view:cardBackgroundColor="#CCFFFFFF"
-
     >
 
     <RelativeLayout
@@ -69,15 +68,28 @@
             android:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
             
             />
-        <ImageView
-            android:id="@+id/image_property"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="fitXY"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/house"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
+
+      <RelativeLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true">
+          <ImageView
+              android:id="@+id/image_property"
+              android:layout_width="match_parent"
+              android:layout_height="150dp"
+              android:scaleType="fitXY"
+              android:layout_marginTop="10dp"
+              android:src="@drawable/house"
+              />
+          <ProgressBar
+              android:id="@+id/progressbar"
+              android:layout_width="80dp"
+              android:layout_height="80dp"
+              android:visibility="invisible"
+              android:layout_centerInParent="true"/>
+
+      </RelativeLayout>
+          </RelativeLayout>
 
 </android.support.v7.widget.CardView>
 

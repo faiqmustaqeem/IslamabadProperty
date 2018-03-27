@@ -42,6 +42,8 @@ public class ShowProperty extends AppCompatActivity {
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +97,7 @@ public class ShowProperty extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, MainActivity.CALL_PERMISSION_CONSTANT);
+                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE},CALL_PERMISSION_CONSTANT);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -120,7 +122,7 @@ public class ShowProperty extends AppCompatActivity {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
                         intent.setData(uri);
-                        activity.startActivityForResult(intent, MainActivity.REQUEST_PERMISSION_SETTING);
+                        activity.startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
                         Toast.makeText(activity, "Go to Permissions to Grant Call Permission", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -133,10 +135,10 @@ public class ShowProperty extends AppCompatActivity {
                 builder.show();
             } else {
                 //just request the permission
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE},MainActivity.CALL_PERMISSION_CONSTANT);
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE},CALL_PERMISSION_CONSTANT);
             }
 
-            SharedPreferences.Editor editor = MainActivity.permissionStatus.edit();
+            SharedPreferences.Editor editor = permissionStatus.edit();
             editor.putBoolean(Manifest.permission.CALL_PHONE,true);
             editor.commit();
 
@@ -175,6 +177,72 @@ public class ShowProperty extends AppCompatActivity {
                 .canceledOnTouchOutside(false)
                 .show();
     }
+        @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CALL_PERMISSION_CONSTANT) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // proceedAfterPermission();
+                Toast.makeText(activity, "Permision Granted !", Toast.LENGTH_SHORT).show();
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)) {
+                    //Show Information about why you need the permission
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle("Need Call Permission");
+                    builder.setMessage("This app needs Call permission");
+                    builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+
+
+                            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, CALL_PERMISSION_CONSTANT);
+
+
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.show();
+                } else {
+                    Toast.makeText(getBaseContext(), "Unable to get Permission", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_PERMISSION_SETTING) {
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                //Got Permission
+                // proceedAfterPermission();
+               // Toast.makeText(activity, "Permission Granted ! You can call now ", Toast.LENGTH_SHORT).show();
+
+                call(GlobalClass.selected_property.getContactNumber());
+            }
+        }
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (sentToSettings) {
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                //Got Permission
+                //proceedAfterPermission();
+                Toast.makeText(activity, "Permission Granted ! you can call now ", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 
 }

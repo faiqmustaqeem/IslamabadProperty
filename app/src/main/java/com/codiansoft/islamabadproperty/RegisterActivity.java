@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
             dialog.setTitle("Registering");
             dialog.setMessage("Wait...");
             dialog.show();
-            StringRequest request = new StringRequest(Request.Method.POST, "http://tpetroerp.com/isb_petro/isb_test/api/register",
+            StringRequest request = new StringRequest(Request.Method.POST, "http://islamabadproperty.pk/app/index.php/api/register",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -167,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e("Volley_error" , error.getMessage() );
+                           // Log.e("Volley_error" , error.getMessage() );
                             parseVolleyError(error);
                             dialog.dismiss();
                         }
