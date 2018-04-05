@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.codiansoft.islamabadproperty.LoginActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:background="@drawable/background">
+
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="250dp"
+            android:layout_height="120dp"
+            android:src="@drawable/logo"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"/>
+
+
+        <LinearLayout
+            android:id="@+id/email_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/logo"
+            android:layout_marginTop="10dp"
+            android:weightSum="5">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight=".7"
+                android:layout_marginTop="5dp"
+
+                android:src="@drawable/email"/>
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/etEmail"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/password_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/email_layout"
+            android:layout_marginTop="10dp"
+            android:weightSum="5">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight=".7"
+                android:layout_marginTop="5dp"
+                android:tint="@android:color/white"
+                android:src="@drawable/lock"/>
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/etPassowrd"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:textColor="@android:color/white"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColorHint="@android:color/white"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                />
+
+        </LinearLayout>
+
+
+
+
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded"
+            android:text="login"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+
+
+
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Register"
+            android:backgroundTint="#00aeef"
+            android:focusable="false"
+            android:textSize="25sp"
+            android:editable="false"
+            android:textColor="#00aeef"/>
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -50,8 +51,9 @@ public class RegisterActivity extends AppCompatActivity {
     Activity activity;
     AppCompatSpinner spinner;
     String country_name;
-    EditText etName, etEmail, etCity, etPhoneNumber;
+    EditText etName, etEmail, etCity, etPhoneNumber , login , password;
     ConnectionHelper connectionHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
         etCity = findViewById(R.id.etCity);
         etPhoneNumber = findViewById(R.id.etNumber);
         connectionHelper=new ConnectionHelper(activity);
+        login=(EditText)findViewById(R.id.login);
+        password=(EditText)findViewById(R.id.etPassowrd);
 
 
         register.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +79,15 @@ public class RegisterActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent i=new Intent(RegisterActivity.this ,LoginActivity.class);
+                startActivity(i);
             }
         });
 
@@ -123,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onResponse(String response) {
 
                             try {
-
+                            Log.e("register" , response);
 
                                 JSONObject job = new JSONObject(response);
                                 JSONObject result = job.getJSONObject("result");
@@ -143,9 +156,12 @@ public class RegisterActivity extends AppCompatActivity {
                                     editor.putString("device_token","" );
                                     editor.putString("name", etName.getText().toString());
 
+                                    String id=result.getString("id");
+                                    editor.putString("id", id);
+
                                     editor.apply();
 
-                                    Intent i = new Intent(activity, MainActivity.class);
+                                    Intent i = new Intent(activity, MainNavigationDrawerActivity.class);
                                     startActivity(i);
                                     finish();
 
@@ -183,6 +199,7 @@ public class RegisterActivity extends AppCompatActivity {
                     params.put("number", etPhoneNumber.getText().toString());
                     params.put("city", etCity.getText().toString());
                     params.put("country",country_name);
+                    params.put("password" , password.getText().toString());
 
                     String refreshedToken = FirebaseInstanceId.getInstance().getToken();
                     params.put("device_token",refreshedToken);
@@ -244,6 +261,11 @@ public class RegisterActivity extends AppCompatActivity {
         if(etCity.getText().toString().equals(""))
         {
             printMsg("Enter City");
+            return false;
+        }
+        if(password.getText().toString().equals(""))
+        {
+            printMsg("Enter Password");
             return false;
         }
         return  true;
