@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.codiansoft.islamabadproperty.Fragments.AddPropertyFragment;
 import com.codiansoft.islamabadproperty.Fragments.DashboardFragment;
+import com.codiansoft.islamabadproperty.Fragments.MyPropertiesFragment;
 
 public class MainNavigationDrawerActivity extends AppCompatActivity
       {
@@ -36,12 +37,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     // tags used to attach the fragments
     private static final String TAG_DASHBOARD = "dashboard";
     private static final String TAG_ADD_PROPERTY = "add_property";
+          private static final String TAG_MY_PROPERTY = "my_property";
     private static final String TAG_LOGOUT = "logout";
 
     public static String CURRENT_TAG = TAG_DASHBOARD;
     private boolean shouldLoadDashboardFragOnBackPress = true;
     private Handler mHandler;
     Activity activity;
+
         public static ImageView calendar;
     // toolbar titles respected to selected nav menu item
     //private String[] activityTitles={"Properties" , "Add Property" };
@@ -84,15 +87,14 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             @Override
             public void run() {
 
-                if(navItemIndex!=3)
-                {
+
                     Fragment fragment = getHomeFragment();
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                             android.R.anim.fade_out);
                     fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
                     fragmentTransaction.commitAllowingStateLoss();
-                }
+
 
             }
         };
@@ -115,6 +117,10 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
             case 1:
                 AddPropertyFragment addPropertyFragment=new AddPropertyFragment();
                 return addPropertyFragment;
+
+            case 2:
+                MyPropertiesFragment myPropertiesFragment=new MyPropertiesFragment();
+                return myPropertiesFragment;
 
             default:
                 return new DashboardFragment();
@@ -145,16 +151,22 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                     case R.id.nav_dashboard:
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_DASHBOARD;
+                        calendar.setVisibility(View.VISIBLE);
                         break;
 
                     case R.id.nav_add_property:
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_ADD_PROPERTY;
+                        calendar.setVisibility(View.GONE);
                         break;
 
-                    case R.id.nav_logout:
+                    case R.id.nav_my_properties:
                         navItemIndex=2;
-                        CURRENT_TAG=TAG_LOGOUT;
+                        CURRENT_TAG=TAG_MY_PROPERTY;
+                        calendar.setVisibility(View.GONE);
+                        break;
+                    case R.id.nav_logout:
+
                         MaterialDialog dialog = new MaterialDialog.Builder(MainNavigationDrawerActivity.this)
                                 .title("Logout")
                                 .content("are you sure you want to logout ?")

@@ -5,6 +5,7 @@ package com.codiansoft.islamabadproperty;
  */
 
 public class PropertyModel {
+    private String id;
     private String date;
     private String contactNumber;
     private String description;
@@ -49,5 +50,13 @@ public class PropertyModel {
 
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

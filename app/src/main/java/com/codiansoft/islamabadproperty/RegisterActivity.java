@@ -53,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
     String country_name;
     EditText etName, etEmail, etCity, etPhoneNumber , login , password;
     ConnectionHelper connectionHelper;
+    public static final int GALLERY_CONSTANT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +83,14 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                Intent i=new Intent(RegisterActivity.this ,LoginActivity.class);
-                startActivity(i);
-            }
-        });
+//        login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                Intent i=new Intent(RegisterActivity.this ,LoginActivity.class);
+//                startActivity(i);
+//            }
+//        });
 
         Locale[] locale = Locale.getAvailableLocales();
         final ArrayList<String> countries = new ArrayList<String>();
@@ -199,7 +200,7 @@ public class RegisterActivity extends AppCompatActivity {
                     params.put("number", etPhoneNumber.getText().toString());
                     params.put("city", etCity.getText().toString());
                     params.put("country",country_name);
-                    params.put("password" , password.getText().toString());
+
 
                     String refreshedToken = FirebaseInstanceId.getInstance().getToken();
                     params.put("device_token",refreshedToken);
@@ -263,11 +264,7 @@ public class RegisterActivity extends AppCompatActivity {
             printMsg("Enter City");
             return false;
         }
-        if(password.getText().toString().equals(""))
-        {
-            printMsg("Enter Password");
-            return false;
-        }
+
         return  true;
     }
     void printMsg(String msg)

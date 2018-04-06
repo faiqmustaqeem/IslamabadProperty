@@ -32,8 +32,9 @@
                     android:shadowDy="0"
                     android:layout_centerInParent="true"
                     android:shadowRadius="10"
+                    android:layout_centerHorizontal="true"
                     android:textColor="@android:color/white"
-                    android:text="ISLAMABADPROPERTY.PK"/>
+                    android:text="@string/islamabadproperty_pk"/>
 
                 <TextView
                     android:id="@+id/showAll"
@@ -55,6 +56,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/calendar"
+                    android:visibility="visible"
                     android:layout_alignParentRight="true"/>
 
 

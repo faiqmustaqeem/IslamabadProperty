@@ -37,6 +37,7 @@
             android:focusable="false"
             android:editable="false"
             android:textSize="20sp"
+            android:visibility="gone"
             android:textColor="#00aeef"/>
 
 
@@ -194,6 +195,7 @@
             android:orientation="horizontal"
             android:layout_below="@id/city_layout"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:weightSum="5">
 
             <ImageView
