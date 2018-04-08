@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -52,8 +53,9 @@ public class AddPropertyFragment extends Fragment {
 
 
     EditText etDescription , etContactNumber;
-    Button btn_select_image , btn_add_property;
-    public static final int PICK_IMAGE = 1;
+    Button   btn_add_property;
+    ImageView btn_select_image;
+//    public static final int PICK_IMAGE = 1;
     String imageBase64="" , extension="";
     Activity activity;
     ConnectionHelper connectionHelper;
@@ -79,7 +81,7 @@ public class AddPropertyFragment extends Fragment {
         etDescription=(EditText)view.findViewById(R.id.etDescription);
         etContactNumber=(EditText)view.findViewById(R.id.etContactNumber);
 
-        btn_select_image=(Button)view.findViewById(R.id.btn_select_image);
+        btn_select_image=(ImageView) view.findViewById(R.id.btn_select_image);
         btn_add_property=(Button)view.findViewById(R.id.btn_add_property);
 
         btn_select_image.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +90,8 @@ public class AddPropertyFragment extends Fragment {
                 Intent galleryIntent = new Intent();
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_CONSTANT);
+                startActivityForResult(galleryIntent,GALLERY_CONSTANT);
+               // startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_CONSTANT);
 
             }
         });
@@ -116,9 +119,15 @@ public class AddPropertyFragment extends Fragment {
                     String filename=getFileName(filePath);
                     extension= filename.substring(filename.lastIndexOf(".") + 1); // Without dot jpg, png
                     Log.e("extension" , extension);
+
                     CropImage.activity(filePath)
                             .setAspectRatio(4,3)
-                            .start(activity);
+                            .setFixAspectRatio(true)
+                            .start(getContext(), this);
+//
+//                    CropImage.activity(filePath)
+//                            .setAspectRatio(4,3)
+//                            .start(activity);
                   //  Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
                    //  imageBase64 = getBase64EncodedString(bitmap);
 
@@ -136,6 +145,7 @@ public class AddPropertyFragment extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
               Uri  uri = result.getUri();
+                btn_select_image.setImageURI(uri);
 
                 File file = new File(uri.getPath());
 
@@ -144,7 +154,7 @@ public class AddPropertyFragment extends Fragment {
                 try {
                     Bitmap bmp = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
                     imageBase64 = getBase64EncodedString(bmp);
-//                    Log.e("Path_image", path);
+                    Log.e("Path_image", imageBase64);
 
 
                 } catch (IOException e) {
@@ -158,6 +168,7 @@ public class AddPropertyFragment extends Fragment {
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+                Log.e("error",error.getMessage());
             }
         }
 
@@ -195,89 +206,98 @@ public class AddPropertyFragment extends Fragment {
     {
       if(etDescription.getText().toString().equals(""))
       {
-          Toast.makeText(activity,"please add description", Toast.LENGTH_SHORT);
+          Toast.makeText(activity,"please add description", Toast.LENGTH_SHORT).show();
           return false;
       }
         if(etContactNumber.getText().toString().equals(""))
         {
-            Toast.makeText(activity,"please add contact number", Toast.LENGTH_SHORT);
+            Toast.makeText(activity,"please add contact number", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(imageBase64.equals(""))
         {
-            Toast.makeText(activity,"please select image", Toast.LENGTH_SHORT);
+            Toast.makeText(activity,"please select image", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
     public void add_property()
     {
-        if(connectionHelper.isConnectingToInternet() && checkFields())
+        if(connectionHelper.isConnectingToInternet())
         {
-            final ProgressDialog dialog=new ProgressDialog(activity);
-            dialog.setTitle("Loading");
-            dialog.setMessage("Wait...");
-            dialog.show();
-            StringRequest request = new StringRequest(Request.Method.POST, "http://islamabadproperty.pk/app/index.php/api/add_property",
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
+            if(checkFields())
+            {
 
-                            try {
+                final ProgressDialog dialog=new ProgressDialog(activity);
+                dialog.setTitle("Loading");
+                dialog.setMessage("Wait...");
+                dialog.show();
+                StringRequest request = new StringRequest(Request.Method.POST, "http://islamabadproperty.pk/app/index.php/api/add_property",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
 
-
-                                JSONObject job = new JSONObject(response);
-                                JSONObject result = job.getJSONObject("result");
-                                String res = result.getString("response");
+                                try {
 
 
-                                if (res.equals("Property Added Successfully Recieved"))
-                                {
+                                    JSONObject job = new JSONObject(response);
+                                    JSONObject result = job.getJSONObject("result");
+                                    String res = result.getString("response");
+
+
+                                    if (res.equals("Property Added Successfully Recieved"))
+                                    {
 
                                         Toast.makeText(activity,"Property successfully uploaded !",Toast.LENGTH_LONG).show();
 
-                                    dialog.dismiss();
+                                        dialog.dismiss();
+                                        DashboardFragment nextFrag= new DashboardFragment();
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.frame, nextFrag,"dashboard")
+                                                .addToBackStack(null)
+                                                .commit();
 
 
-                                } else {
+                                    } else {
+                                        dialog.dismiss();
+                                        Toast.makeText(activity,res, Toast.LENGTH_SHORT).show();
+                                        // finish();
+                                    }
+                                } catch (JSONException e) {
+                                    Log.e("ErrorMessage", e.getMessage());
+                                    e.printStackTrace();
                                     dialog.dismiss();
-                                    Toast.makeText(activity,res, Toast.LENGTH_SHORT).show();
-                                    // finish();
                                 }
-                            } catch (JSONException e) {
-                                Log.e("ErrorMessage", e.getMessage());
-                                e.printStackTrace();
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Log.e("Volley_error" , error.getMessage() );
+                                parseVolleyError(error);
                                 dialog.dismiss();
                             }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        SharedPreferences prefs = activity.getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                        String id=prefs.getString("id","");
+                        params.put("user_id", id);
+                        params.put("upload_image",imageBase64);
+                        params.put("desc",etDescription.getText().toString());
+                        params.put("number",etContactNumber.getText().toString());
+                        params.put("extension",extension);
 
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // Log.e("Volley_error" , error.getMessage() );
-                            parseVolleyError(error);
-                            dialog.dismiss();
-                        }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
-                    SharedPreferences prefs = activity.getSharedPreferences("SharedPreferences", MODE_PRIVATE);
-                    String id=prefs.getString("id","");
-                    params.put("user_id", id);
-                    params.put("upload_image",imageBase64);
-                    params.put("desc",etDescription.getText().toString());
-                    params.put("number",etContactNumber.getText().toString());
-                    params.put("extension",extension);
+                        Log.e("params" , params.toString());
 
-                    Log.e("params" , params.toString());
+                        return params;
+                    }
+                };
 
-                    return params;
-                }
-            };
-
-            Volley.newRequestQueue(activity).add(request);
+                Volley.newRequestQueue(activity).add(request);
+            }
         }
         else {
             Toast.makeText(activity , " your application is not connected to internet ..." , Toast.LENGTH_SHORT).show();

@@ -13,11 +13,11 @@
 
         <item
             android:id="@+id/nav_my_properties"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/home"
             android:title="My Properties" />
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/logout"
             android:title="Logout" />
 
     </group>

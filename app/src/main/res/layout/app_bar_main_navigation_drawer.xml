@@ -24,40 +24,38 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:textStyle="bold"
                     android:textSize="16sp"
                     android:shadowColor="@android:color/darker_gray"
                     android:shadowDx="0"
                     android:shadowDy="0"
-                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
                     android:shadowRadius="10"
-                    android:layout_centerHorizontal="true"
                     android:textColor="@android:color/white"
                     android:text="@string/islamabadproperty_pk"/>
 
-                <TextView
-                    android:id="@+id/showAll"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:text="Show All"
-                    android:textSize="15sp"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    android:textColor="@android:color/white"
-                    />
+                <!--<TextView-->
+                    <!--android:id="@+id/showAll"-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Show All"-->
+                    <!--android:textSize="15sp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:visibility="gone"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--/>-->
 
                 <ImageView
                     android:id="@+id/calendar"
                     android:layout_width="25dp"
                     android:clickable="true"
                     android:layout_height="25dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/calendar"
                     android:visibility="visible"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentEnd="true"/>
 
 
 

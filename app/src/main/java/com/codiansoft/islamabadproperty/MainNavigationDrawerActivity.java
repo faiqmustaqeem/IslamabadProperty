@@ -157,13 +157,13 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
                     case R.id.nav_add_property:
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_ADD_PROPERTY;
-                        calendar.setVisibility(View.GONE);
+                        calendar.setVisibility(View.INVISIBLE);
                         break;
 
                     case R.id.nav_my_properties:
                         navItemIndex=2;
                         CURRENT_TAG=TAG_MY_PROPERTY;
-                        calendar.setVisibility(View.GONE);
+                        calendar.setVisibility(View.INVISIBLE);
                         break;
                     case R.id.nav_logout:
 
@@ -263,7 +263,7 @@ public class MainNavigationDrawerActivity extends AppCompatActivity
     {
         SharedPreferences sharedPreferences=getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         sharedPreferences.edit().clear().commit();
-        Intent intent=new Intent(MainNavigationDrawerActivity.this , LoginActivity.class);
+        Intent intent=new Intent(MainNavigationDrawerActivity.this , RegisterActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
